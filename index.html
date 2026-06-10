@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>多平台协同发力：《给阿嬷的情书》口碑与传播数据新闻</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=ZCOOL+XiaoWei&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --warm-bg: #faf6f1;
+            --paper: #fefdfb;
+            --ink: #3d3229;
+            --clay: #c4a882;
+            --terracotta: #c17f59;
+            --dusty-rose: #c9a9a6;
+            --sage: #9caf88;
+            --deep-walnut: #5c4033;
+            --gold: #d4a574;
+        }
+        
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background-color: var(--warm-bg);
+            color: var(--ink);
+            line-height: 1.8;
+        }
+        
+        .serif {
+            font-family: 'Noto Serif SC', serif;
+        }
+        
+        .calligraphy {
+            font-family: 'ZCOOL XiaoWei', serif;
+        }
+        
+        /* 纸质纹理背景 */
+        .paper-texture {
+            background-color: var(--paper);
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+        }
+        
+        /* 首屏 - 老照片质感 */
+        .hero-section {
+            background: linear-gradient(180deg, #3d3229 0%, #5c4033 50%, #8b6914 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grain)' opacity='0.15'/%3E%3C/svg%3E");
+            opacity: 0.4;
+        }
+        
+        .hero-section::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 200px;
+            background: linear-gradient(to top, var(--warm-bg), transparent);
+        }
+        
+        /* 手写信笺效果 */
+        .letter-card {
+            background: var(--paper);
+            box-shadow: 
+                0 1px 1px rgba(0,0,0,0.05),
+                0 2px 2px rgba(0,0,0,0.05),
+                0 4px 4px rgba(0,0,0,0.05),
+                0 8px 8px rgba(0,0,0,0.05);
+            border: 1px solid rgba(196, 168, 130, 0.3);
+            position: relative;
+        }
+        
+        .letter-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--terracotta), var(--gold), var(--clay));
+            opacity: 0.6;
+        }
+        
+        /* 邮票装饰 */
+        .stamp {
+            display: inline-block;
+            border: 2px dashed var(--terracotta);
+            padding: 4px 12px;
+            transform: rotate(-3deg);
+            color: var(--terracotta);
+            font-weight: 600;
+            font-size: 0.85rem;
+            opacity: 0.8;
+        }
+        
+        /* 温暖的数据高亮 */
+        .warm-highlight {
+            background: linear-gradient(120deg, rgba(212, 165, 116, 0.3) 0%, rgba(193, 127, 89, 0.2) 100%);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: 700;
+            color: var(--deep-walnut);
+        }
+        
+        /* 平台标签 - 温暖风格 */
+        .platform-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 16px;
+            border-radius: 24px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+        }
+        
+        .tag-douban {
+            background: #e8f5e9;
+            color: #2e7d32;
+            border: 1px solid #c8e6c9;
+        }
+        
+        .tag-douyin {
+            background: #fff3e0;
+            color: #e65100;
+            border: 1px solid #ffe0b2;
+        }
+        
+        .tag-xhs {
+            background: #fce4ec;
+            color: #c2185b;
+            border: 1px solid #f8bbd9;
+        }
+        
+        /* 时间线 - 信笺串联 */
+        .timeline-wrapper {
+            position: relative;
+            padding-left: 32px;
+        }
+        
+        .timeline-wrapper::before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--clay), var(--terracotta), var(--dusty-rose));
+            opacity: 0.4;
+        }
+        
+        .timeline-node {
+            position: relative;
+            padding-bottom: 32px;
+        }
+        
+        .timeline-node::before {
+            content: '✉';
+            position: absolute;
+            left: -28px;
+            top: 2px;
+            font-size: 14px;
+            color: var(--terracotta);
+            background: var(--warm-bg);
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .timeline-node.active::before {
+            content: '❤';
+            color: #c62828;
+            font-size: 12px;
+        }
+        
+        /* 引用框 - 家书风格 */
+        .quote-letter {
+            background: #fdfbf7;
+            border-left: 3px solid var(--terracotta);
+            padding: 24px 28px;
+            margin: 24px 0;
+            position: relative;
+            font-style: italic;
+            box-shadow: 0 2px 8px rgba(92, 64, 51, 0.04);
+        }
+        
+        .quote-letter::before {
+            content: '“';
+            font-size: 48px;
+            color: var(--clay);
+            opacity: 0.4;
+            position: absolute;
+            top: -8px;
+            left: 12px;
+            font-family: 'Noto Serif SC', serif;
+            line-height: 1;
+        }
+        
+        /* 统计卡片 - 老相框感 */
+        .memory-card {
+            background: var(--paper);
+            border: 1px solid rgba(196, 168, 130, 0.25);
+            border-radius: 8px;
+            padding: 28px 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .memory-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(92, 64, 51, 0.08);
+            border-color: var(--clay);
+        }
+        
+        .memory-card::after {
+            content: '';
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            right: 4px;
+            bottom: 4px;
+            border: 1px solid rgba(196, 168, 130, 0.15);
+            border-radius: 4px;
+            pointer-events: none;
+        }
+        
+        .memory-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--deep-walnut);
+            line-height: 1;
+            font-family: 'Noto Serif SC', serif;
+        }
+        
+        /* 章节分隔 - 信笺折痕 */
+        .section-fold {
+            height: 40px;
+            position: relative;
+            margin: 48px 0;
+        }
+        
+        .section-fold::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 10%;
+            right: 10%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--clay), transparent);
+        }
+        
+        .section-fold::after {
+            content: '❦';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: var(--clay);
+            font-size: 20px;
+            background: var(--warm-bg);
+            padding: 0 16px;
+        }
+        
+        /* 传播链路 - 家书传递 */
+        .chain-link {
+            background: var(--paper);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            border: 1px solid rgba(196, 168, 130, 0.2);
+            position: relative;
+            transition: all 0.3s;
+        }
+        
+        .chain-link:hover {
+            border-color: var(--terracotta);
+            box-shadow: 0 4px 12px rgba(193, 127, 89, 0.1);
+        }
+        
+        .chain-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+            font-size: 24px;
+            background: #faf6f1;
+            border: 2px solid var(--clay);
+        }
+        
+        /* 导航 */
+        .nav-warm {
+            background: rgba(250, 246, 241, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(196, 168, 130, 0.2);
+        }
+        
+        /* 按钮 */
+        .btn-warm {
+            background: var(--deep-walnut);
+            color: #faf6f1;
+            padding: 10px 24px;
+            border-radius: 24px;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn-warm:hover {
+            background: var(--terracotta);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(193, 127, 89, 0.3);
+        }
+        
+        /* 滚动条 */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--warm-bg);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--clay);
+            border-radius: 4px;
+        }
+        
+        /* 动画 */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .animate-in {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+        
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .memory-number { font-size: 1.75rem; }
+            .hero-section { padding-top: 80px; padding-bottom: 60px; }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- 导航 -->
+    <nav class="nav-warm fixed top-0 w-full z-50 px-4 py-3">
+        <div class="max-w-5xl mx-auto flex justify-between items-center">
+            <div class="serif text-lg font-bold text-[#5c4033] tracking-wide">
+                <i class="fas fa-envelope-open-text mr-2 text-[#c17f59]"></i>给阿嬷的情书
+            </div>
+            <div class="hidden md:flex gap-8 text-sm text-[#5c4033]/80">
+                <a href="#douban" class="hover:text-[#c17f59] transition-colors">豆瓣口碑</a>
+                <a href="#douyin" class="hover:text-[#c17f59] transition-colors">抖音宣发</a>
+                <a href="#xiaohongshu" class="hover:text-[#c17f59] transition-colors">小红书热度</a>
+                <a href="#summary" class="hover:text-[#c17f59] transition-colors">传播闭环</a>
+            </div>
+            <button class="md:hidden text-[#5c4033]" onclick="document.getElementById('mobileMenu').classList.toggle('hidden')">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        <div id="mobileMenu" class="hidden md:hidden mt-3 pb-3 space-y-2 text-center text-sm text-[#5c4033]/80">
+            <a href="#douban" class="block py-2 hover:text-[#c17f59]">豆瓣口碑</a>
+            <a href="#douyin" class="block py-2 hover:text-[#c17f59]">抖音宣发</a>
+            <a href="#xiaohongshu" class="block py-2 hover:text-[#c17f59]">小红书热度</a>
+            <a href="#summary" class="block py-2 hover:text-[#c17f59]">传播闭环</a>
+        </div>
+    </nav>
+
+    <!-- 首屏 -->
+    <header class="hero-section pt-28 pb-20 md:pt-36 md:pb-28 px-4 text-center relative">
+        <div class="max-w-3xl mx-auto relative z-10">
+            <div class="mb-6 flex justify-center gap-3 flex-wrap">
+                <span class="stamp">潮汕方言</span>
+                <span class="stamp">亲情影片</span>
+                <span class="stamp">票房黑马</span>
+            </div>
+            <h1 class="calligraphy text-4xl md:text-6xl text-[#faf6f1] mb-6 leading-tight tracking-wider">
+                多平台协同发力<br>
+                <span class="text-[#d4a574]">《给阿嬷的情书》</span><br>
+                <span class="text-2xl md:text-4xl opacity-90">口碑与传播数据新闻</span>
+            </h1>
+            <p class="text-[#faf6f1]/80 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed font-light">
+                从影迷评价、官方宣发、演员社交三个维度<br>
+                解析一部小成本影片如何依托不同平台<br>
+                完成「口碑打底 + 全网引流」的传播闭环
+            </p>
+            <div class="mt-10 flex justify-center items-center gap-4 text-[#faf6f1]/50 text-sm">
+                <span><i class="fas fa-calendar-alt mr-1"></i> 2026年6月</span>
+                <span>•</span>
+                <span><i class="fas fa-database mr-1"></i> 豆瓣 · 抖音 · 小红书</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- 导语 -->
+    <section class="max-w-4xl mx-auto px-4 -mt-10 relative z-20">
+        <div class="letter-card rounded-lg p-8 md:p-10 animate-in">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="w-10 h-10 rounded-full bg-[#faf6f1] border-2 border-[#c4a882] flex items-center justify-center text-[#c17f59]">
+                    <i class="fas fa-feather-alt"></i>
+                </div>
+                <h2 class="serif text-xl font-bold text-[#5c4033]">导语</h2>
+            </div>
+            <p class="text-[#3d3229]/90 leading-loose text-lg">
+                《给阿嬷的情书》作为一部潮汕方言亲情影片，凭借小成本实现票房与热度双逆袭。本次结合<span class="warm-highlight">豆瓣</span>、<span class="warm-highlight">抖音</span>、<span class="warm-highlight">小红书</span>三大平台数据，从观众口碑、官方宣传、演员互动三个角度，解析影片的走红逻辑。
+            </p>
+            <div class="mt-6 pt-6 border-t border-[#c4a882]/20 flex flex-wrap gap-4 text-sm text-[#5c4033]/70">
+                <span><i class="fas fa-film mr-1 text-[#c17f59]"></i> 潮汕方言亲情片</span>
+                <span><i class="fas fa-chart-line mr-1 text-[#c17f59]"></i> 票房黑马</span>
+                <span><i class="fas fa-users mr-1 text-[#c17f59]"></i> 多平台传播</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- 核心数据 -->
+    <section class="max-w-5xl mx-auto px-4 py-12">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="memory-card">
+                <div class="memory-number text-[#c17f59]">9.2</div>
+                <div class="mt-2 text-sm text-[#5c4033]/70">豆瓣评分</div>
+                <div class="text-xs text-[#5c4033]/50 mt-1">高分口碑基石</div>
+            </div>
+            <div class="memory-card">
+                <div class="memory-number text-[#c17f59]">14亿+</div>
+                <div class="mt-2 text-sm text-[#5c4033]/70">累计票房</div>
+                <div class="text-xs text-[#5c4033]/50 mt-1">小成本大回报</div>
+            </div>
+            <div class="memory-card">
+                <div class="memory-number text-[#c17f59]">70万+</div>
+                <div class="mt-2 text-sm text-[#5c4033]/70">评分人数</div>
+                <div class="text-xs text-[#5c4033]/50 mt-1">口碑裂变效应</div>
+            </div>
+            <div class="memory-card">
+                <div class="memory-number text-[#c17f59]">1400万</div>
+                <div class="mt-2 text-sm text-[#5c4033]/70">制作成本</div>
+                <div class="text-xs text-[#5c4033]/50 mt-1">投资回报率超100倍</div>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-fold max-w-4xl mx-auto"></div>
+
+    <!-- 正文1：豆瓣 -->
+    <section id="douban" class="max-w-4xl mx-auto px-4 py-10">
+        <div class="flex items-center gap-3 mb-2">
+            <span class="platform-tag tag-douban">
+                <i class="fas fa-star"></i> 豆瓣
+            </span>
+            <span class="text-sm text-[#5c4033]/60">口碑基石</span>
+        </div>
+        <h2 class="serif text-2xl md:text-3xl font-bold text-[#5c4033] mb-6">优质内容铸就好口碑</h2>
+        
+        <p class="text-[#3d3229]/85 leading-loose mb-6 text-lg">
+            依托豆瓣评分、星级分布与用户评论数据可见，影片整体评分优异，高分评价占比极高。高点赞短评集中夸赞<span class="warm-highlight">剧情真实</span>、<span class="warm-highlight">情感真挚</span>、<span class="warm-highlight">方言故事动人</span>。扎实的内容与观众认可，是影片持续走红的根本。
+        </p>
+
+        <!-- 豆瓣评分图表 -->
+        <div class="letter-card rounded-lg p-6 md:p-8 mb-8">
+            <h3 class="serif text-lg font-semibold mb-6 text-[#5c4033] flex items-center gap-2">
+                <i class="fas fa-chart-area text-[#c17f59]"></i> 豆瓣评分与评分人数走势
+            </h3>
+            <div class="relative h-72 w-full">
+                <canvas id="doubanChart"></canvas>
+            </div>
+            <p class="text-xs text-[#5c4033]/50 mt-4 text-center">
+                <i class="fas fa-info-circle mr-1"></i>数据来源：豆瓣电影 | 评分随人数增加不降反升，呈现罕见的口碑裂变效应
+            </p>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-6 mb-8">
+            <div class="letter-card rounded-lg p-6">
+                <h3 class="serif text-lg font-semibold mb-4 text-[#5c4033]">星级分布</h3>
+                <div class="relative h-64 w-full">
+                    <canvas id="starChart"></canvas>
+                </div>
+            </div>
+            <div class="letter-card rounded-lg p-6">
+                <h3 class="serif text-lg font-semibold mb-4 text-[#5c4033]">观众评价关键词</h3>
+                <div class="flex flex-wrap gap-2 mt-4">
+                    <span class="px-3 py-1.5 bg-[#faf6f1] border border-[#c4a882]/30 rounded-full text-sm text-[#5c4033] hover:border-[#c17f59] transition-colors cursor-default">
+                        <i class="fas fa-heart text-[#c17f59] mr-1 text-xs"></i>情感真挚
+                    </span>
+                    <span class="px-3 py-1.5 bg-[#faf6f1] border border-[#c4a882]/30 rounded-full text-sm text-[#5c4033] hover:border-[#c17f59] transition-colors cursor-default">
+                        <i class="fas fa-language text-[#c17f59] mr-1 text-xs"></i>方言动人
+                    </span>
+                    <span class="px-3 py-1.5 bg-[#faf6f1] border border-[#c4a882]/30 rounded-full text-sm text-[#5c4033] hover:border-[#c17f59] transition-colors cursor-default">
+                        <i class="fas fa-theater-masks text-[#c17f59] mr-1 text-xs"></i>剧情真实
+                    </span>
+                    <span class="px-3 py-1.5 bg-[#faf6f1] border border-[#c4a882]/30 rounded-full text-sm text-[#5c4033] hover:border-[#c17f59] transition-colors cursor-default">
+                        <i class="fas fa-user-friends text-[#c17f59] mr-1 text-xs"></i>全员素人
+                    </span>
+                    <span class="px-3 py-1.5 bg-[#faf6f1] border border-[#c4a882]/30 rounded-full text-sm text-[#5c4033] hover:border-[#c17f59] transition-colors cursor-default">
+                        <i class="fas fa-envelope text-[#c17f59] mr-1 text-xs"></i>侨批文化
+                    </span>
+                    <span class="px-3 py-1.5 bg-[#faf6f1] border border-[#c4a882]/30 rounded-full text-sm text-[#5c4033] hover:border-[#c17f59] transition-colors cursor-default">
+                        <i class="fas fa-hand-holding-heart text-[#c17f59] mr-1 text-xs"></i>女性互助
+                    </span>
+                    <span class="px-3 py-1.5 bg-[#faf6f1] border border-[#c4a882]/30 rounded-full text-sm text-[#5c4033] hover:border-[#c17f59] transition-colors cursor-default">
+                        <i class="fas fa-moon text-[#c17f59] mr-1 text-xs"></i>克制叙事
+                    </span>
+                    <span class="px-3 py-1.5 bg-[#faf6f1] border border-[#c4a882]/30 rounded-full text-sm text-[#5c4033] hover:border-[#c17f59] transition-colors cursor-default">
+                        <i class="fas fa-wine-glass text-[#c17f59] mr-1 text-xs"></i>后劲极大
+                    </span>
+                </div>
+                <div class="mt-6 space-y-4">
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="text-[#5c4033]/70">五星好评占比</span>
+                            <span class="font-bold text-[#2e7d32]">~60%</span>
+                        </div>
+                        <div class="w-full bg-[#faf6f1] rounded-full h-2 border border-[#c4a882]/20">
+                            <div class="bg-[#66bb6a] h-2 rounded-full transition-all duration-1000" style="width: 60%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="text-[#5c4033]/70">四星及以上占比</span>
+                            <span class="font-bold text-[#c17f59]">~92%</span>
+                        </div>
+                        <div class="w-full bg-[#faf6f1] rounded-full h-2 border border-[#c4a882]/20">
+                            <div class="bg-[#c17f59] h-2 rounded-full transition-all duration-1000" style="width: 92%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quote-letter rounded-lg">
+            <p class="text-[#5c4033]/80 relative z-10 pl-4 leading-relaxed">
+                近十年来国产剧情片最高分。影片没有刻意煽情，没有激烈的冲突，但让很多人流泪——不是因为它讲了一段多么轰轰烈烈的爱情，而是因为它呈现了两种在当代亲密关系中越来越稀缺的能力：<strong>在不确定性中坚守等待的能力</strong>，以及<strong>不求回报地付出的能力</strong>。
+            </p>
+            <div class="text-right mt-3 text-sm text-[#5c4033]/50">
+                <i class="fas fa-pen-fancy mr-1"></i>虎嗅网影评分析
+            </div>
+        </div>
+    </section>
+
+    <div class="section-fold max-w-4xl mx-auto"></div>
+
+    <!-- 正文2：抖音 -->
+    <section id="douyin" class="max-w-4xl mx-auto px-4 py-10">
+        <div class="flex items-center gap-3 mb-2">
+            <span class="platform-tag tag-douyin">
+                <i class="fas fa-music"></i> 抖音
+            </span>
+            <span class="text-sm text-[#5c4033]/60">官方宣发</span>
+        </div>
+        <h2 class="serif text-2xl md:text-3xl font-bold text-[#5c4033] mb-6">官方短视频撬动公域流量</h2>
+        
+        <p class="text-[#3d3229]/85 leading-loose mb-6 text-lg">
+            电影官方抖音账号发布多条宣传物料，视频收获大量点赞。短视频形式直观展现影片温情片段，降低观影门槛，快速触达泛娱乐用户，为影片带来大规模线下观影转化。
+        </p>
+
+        <!-- 票房逆袭时间线 -->
+        <div class="letter-card rounded-lg p-6 md:p-8 mb-8">
+            <h3 class="serif text-lg font-semibold mb-6 text-[#5c4033] flex items-center gap-2">
+                <i class="fas fa-history text-[#c17f59]"></i> 票房逆袭关键节点
+            </h3>
+            <div class="timeline-wrapper">
+                <div class="timeline-node">
+                    <div class="text-sm text-[#c17f59] font-semibold mb-1">4月30日 · 上映首日</div>
+                    <div class="font-bold text-[#5c4033]">排片1.6%，票房377万</div>
+                    <div class="text-sm text-[#5c4033]/60 mt-1">业内预测：「影院一日游」，总票房不超5000万</div>
+                </div>
+                <div class="timeline-node">
+                    <div class="text-sm text-[#c17f59] font-semibold mb-1">5月5日 · 豆瓣开分</div>
+                    <div class="font-bold text-[#5c4033]">开分9.0，口碑开始发酵</div>
+                    <div class="text-sm text-[#5c4033]/60 mt-1">观众自发制作哭戏合集、方言解读视频</div>
+                </div>
+                <div class="timeline-node active">
+                    <div class="text-sm text-[#c17f59] font-semibold mb-1">5月9日 · 票房破亿</div>
+                    <div class="font-bold text-[#5c4033]">中国首部破亿的潮汕方言电影</div>
+                    <div class="text-sm text-[#5c4033]/60 mt-1">#给阿嬷的情书观影repo# 话题阅读量破15亿</div>
+                </div>
+                <div class="timeline-node active">
+                    <div class="text-sm text-[#c17f59] font-semibold mb-1">5月10日 · 母亲节</div>
+                    <div class="font-bold text-[#5c4033]">单日票房冠军，大满贯</div>
+                    <div class="text-sm text-[#5c4033]/60 mt-1">观影人数、上座率全第一</div>
+                </div>
+                <div class="timeline-node active">
+                    <div class="text-sm text-[#c17f59] font-semibold mb-1">5月16日 · 单日破亿</div>
+                    <div class="font-bold text-[#5c4033]">连续两天单日票房过亿</div>
+                    <div class="text-sm text-[#5c4033]/60 mt-1">排片从1.6%逆袭至34.3%</div>
+                </div>
+                <div class="timeline-node active">
+                    <div class="text-sm text-[#c17f59] font-semibold mb-1">5月底 · 票房破14亿</div>
+                    <div class="font-bold text-[#5c4033]">进入影史票房榜前120名</div>
+                    <div class="text-sm text-[#5c4033]/60 mt-1">预测最终票房将超18亿</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 票房增长 -->
+        <div class="letter-card rounded-lg p-6 md:p-8 mb-8">
+            <h3 class="serif text-lg font-semibold mb-6 text-[#5c4033] flex items-center gap-2">
+                <i class="fas fa-chart-bar text-[#c17f59]"></i> 票房增长曲线（亿元）
+            </h3>
+            <div class="relative h-72 w-full">
+                <canvas id="boxofficeChart"></canvas>
+            </div>
+            <p class="text-xs text-[#5c4033]/50 mt-4 text-center">
+                <i class="fas fa-info-circle mr-1"></i>数据来源：猫眼专业版、灯塔专业版 | 典型的「口碑驱动型」指数增长
+            </p>
+        </div>
+
+        <div class="quote-letter rounded-lg">
+            <p class="text-[#5c4033]/80 relative z-10 pl-4 leading-relaxed">
+                短视频平台通过15秒温情片段、方言教学、观众 reaction 等内容形态，将一部「小众方言片」转化为「全民情感消费品」。抖音的算法推荐让原本触达不到的北方城市观众也开始关注这部影片。
+            </p>
+        </div>
+    </section>
+
+    <div class="section-fold max-w-4xl mx-auto"></div>
+
+    <!-- 正文3：小红书 -->
+    <section id="xiaohongshu" class="max-w-4xl mx-auto px-4 py-10">
+        <div class="flex items-center gap-3 mb-2">
+            <span class="platform-tag tag-xhs">
+                <i class="fas fa-book-open"></i> 小红书
+            </span>
+            <span class="text-sm text-[#5c4033]/60">演员账号</span>
+        </div>
+        <h2 class="serif text-2xl md:text-3xl font-bold text-[#5c4033] mb-6">演员账号延伸话题热度</h2>
+        
+        <p class="text-[#3d3229]/85 leading-loose mb-6 text-lg">
+            主演在小红书发布相关笔记，粉丝及普通观众在评论区分享观影感受、交流剧情，让影片话题持续发酵。特别是84岁素人演员吴少卿（饰演阿嬷）的真实故事，以及00后主演李思潼的个人分享，形成了「演员即观众」的亲切互动氛围。
+        </p>
+
+        <!-- 平台矩阵 -->
+        <div class="letter-card rounded-lg p-6 md:p-8 mb-8">
+            <h3 class="serif text-lg font-semibold mb-6 text-[#5c4033] flex items-center gap-2">
+                <i class="fas fa-network-wired text-[#c17f59]"></i> 三平台传播效果矩阵
+            </h3>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead>
+                        <tr class="border-b-2 border-[#c4a882]/30">
+                            <th class="text-left py-3 px-4 text-[#5c4033]/70 font-medium">平台</th>
+                            <th class="text-center py-3 px-4 text-[#5c4033]/70 font-medium">核心功能</th>
+                            <th class="text-center py-3 px-4 text-[#5c4033]/70 font-medium">传播形式</th>
+                            <th class="text-center py-3 px-4 text-[#5c4033]/70 font-medium">受众特征</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-[#3d3229]/85">
+                        <tr class="border-b border-[#c4a882]/10 hover:bg-[#faf6f1]/50 transition-colors">
+                            <td class="py-4 px-4 font-semibold text-[#2e7d32]">
+                                <i class="fas fa-star mr-1"></i>豆瓣
+                            </td>
+                            <td class="py-4 px-4 text-center">口碑锚定</td>
+                            <td class="py-4 px-4 text-center">长评 / 评分</td>
+                            <td class="py-4 px-4 text-center">影迷 / 文艺青年</td>
+                        </tr>
+                        <tr class="border-b border-[#c4a882]/10 hover:bg-[#faf6f1]/50 transition-colors">
+                            <td class="py-4 px-4 font-semibold text-[#e65100]">
+                                <i class="fas fa-music mr-1"></i>抖音
+                            </td>
+                            <td class="py-4 px-4 text-center">流量曝光</td>
+                            <td class="py-4 px-4 text-center">短视频 / 切片</td>
+                            <td class="py-4 px-4 text-center">泛娱乐用户</td>
+                        </tr>
+                        <tr class="hover:bg-[#faf6f1]/50 transition-colors">
+                            <td class="py-4 px-4 font-semibold text-[#c2185b]">
+                                <i class="fas fa-book-open mr-1"></i>小红书
+                            </td>
+                            <td class="py-4 px-4 text-center">话题延续</td>
+                            <td class="py-4 px-4 text-center">图文 / 笔记</td>
+                            <td class="py-4 px-4 text-center">年轻女性 / 都市白领</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 传播链路 -->
+        <div class="letter-card rounded-lg p-6 md:p-8 mb-8">
+            <h3 class="serif text-lg font-semibold mb-8 text-[#5c4033] text-center">传播链路：从口碑到票房</h3>
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="chain-link flex-1 w-full">
+                    <div class="chain-icon text-[#2e7d32]">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="font-bold text-[#5c4033] mb-1">豆瓣立口碑</div>
+                    <div class="text-sm text-[#5c4033]/70">9.2分 × 70万人<br>建立信任基础</div>
+                </div>
+                <div class="text-2xl text-[#c4a882] hidden md:block">
+                    <i class="fas fa-long-arrow-alt-right"></i>
+                </div>
+                <div class="text-2xl text-[#c4a882] md:hidden">
+                    <i class="fas fa-long-arrow-alt-down"></i>
+                </div>
+                <div class="chain-link flex-1 w-full">
+                    <div class="chain-icon text-[#e65100]">
+                        <i class="fas fa-video"></i>
+                    </div>
+                    <div class="font-bold text-[#5c4033] mb-1">抖音做曝光</div>
+                    <div class="text-sm text-[#5c4033]/70">短视频切片 × 算法<br>触达泛娱乐用户</div>
+                </div>
+                <div class="text-2xl text-[#c4a882] hidden md:block">
+                    <i class="fas fa-long-arrow-alt-right"></i>
+                </div>
+                <div class="text-2xl text-[#c4a882] md:hidden">
+                    <i class="fas fa-long-arrow-alt-down"></i>
+                </div>
+                <div class="chain-link flex-1 w-full">
+                    <div class="chain-icon text-[#c2185b]">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <div class="font-bold text-[#5c4033] mb-1">小红书续热度</div>
+                    <div class="text-sm text-[#5c4033]/70">演员笔记 × 观众UGC<br>完成二次扩散</div>
+                </div>
+            </div>
+            <div class="mt-8 text-center">
+                <div class="inline-flex items-center gap-2 bg-[#faf6f1] border border-[#c4a882]/30 px-6 py-3 rounded-full text-sm text-[#5c4033]">
+                    <i class="fas fa-sync-alt text-[#c17f59]"></i>
+                    闭环：线下观影 → 线上分享 → 口碑反哺 → 更多观影
+                </div>
+            </div>
+        </div>
+
+        <div class="quote-letter rounded-lg">
+            <p class="text-[#5c4033]/80 relative z-10 pl-4 leading-relaxed">
+                小红书上的UGC内容具有极强的「种草」属性。观众分享的「观影妆花了」「带妈妈二刷」「潮汕人DNA动了」等真实体验，比官方广告更具说服力。主演李思潼的个人账号互动，更让粉丝产生「陪伴式追星」的情感连接。
+            </p>
+        </div>
+    </section>
+
+    <div class="section-fold max-w-4xl mx-auto"></div>
+
+    <!-- 正文4：综合总结 -->
+    <section id="summary" class="max-w-4xl mx-auto px-4 py-10 mb-16">
+        <div class="flex items-center gap-3 mb-2">
+            <span class="px-3 py-1.5 bg-[#5c4033] text-[#faf6f1] rounded-full text-sm font-medium">
+                <i class="fas fa-lightbulb mr-1"></i>综合分析
+            </span>
+        </div>
+        <h2 class="serif text-2xl md:text-3xl font-bold text-[#5c4033] mb-6">传播闭环：从口碑到票房的数据逻辑</h2>
+
+        <p class="text-[#3d3229]/85 leading-loose mb-8 text-lg">
+            影片形成了<span class="warm-highlight">「豆瓣立口碑 → 抖音做曝光 → 小红书续热度」</span>的完整传播链条。优质内容是内核，多平台差异化运营则让小众方言电影突破圈层限制，成为全民热议作品。
+        </p>
+
+        <!-- 核心洞察 -->
+        <div class="grid md:grid-cols-3 gap-4 mb-8">
+            <div class="letter-card rounded-lg p-6 border-t-4 border-[#2e7d32]">
+                <div class="text-2xl mb-3 text-[#2e7d32]"><i class="fas fa-chart-line"></i></div>
+                <h4 class="font-bold text-[#5c4033] mb-2 serif">数据反常性</h4>
+                <p class="text-sm text-[#5c4033]/70 leading-relaxed">评分人数从12万增至70万，分数不降反升（9.0→9.2），打破「人数多分数降」的行业规律</p>
+            </div>
+            <div class="letter-card rounded-lg p-6 border-t-4 border-[#e65100]">
+                <div class="text-2xl mb-3 text-[#e65100]"><i class="fas fa-rocket"></i></div>
+                <h4 class="font-bold text-[#5c4033] mb-2 serif">排片逆袭</h4>
+                <p class="text-sm text-[#5c4033]/70 leading-relaxed">从1.6%的「影院配角」到34.3%的排片占比，单日票房占比最高达80.3%</p>
+            </div>
+            <div class="letter-card rounded-lg p-6 border-t-4 border-[#c2185b]">
+                <div class="text-2xl mb-3 text-[#c2185b]"><i class="fas fa-hand-holding-heart"></i></div>
+                <h4 class="font-bold text-[#5c4033] mb-2 serif">自来水效应</h4>
+                <p class="text-sm text-[#5c4033]/70 leading-relaxed">剧组坦言「没钱做营销」，全靠观众自发推荐，韩寒、陈妍希等明星主动背书</p>
+            </div>
+        </div>
+
+        <!-- 行业启示 -->
+        <div class="letter-card rounded-lg p-8 bg-gradient-to-br from-[#5c4033] to-[#3d3229] text-[#faf6f1]">
+            <h3 class="serif text-xl font-bold mb-6 flex items-center gap-2">
+                <i class="fas fa-gem text-[#d4a574]"></i> 行业启示
+            </h3>
+            <ul class="space-y-4 text-[#faf6f1]/85">
+                <li class="flex items-start gap-3">
+                    <span class="text-[#d4a574] mt-1"><i class="fas fa-heart"></i></span>
+                    <span><strong class="text-[#faf6f1]">内容为王从未过时：</strong>1400万成本撬动14亿+票房，证明好故事比大制作更具穿透力</span>
+                </li>
+                <li class="flex items-start gap-3">
+                    <span class="text-[#d4a574] mt-1"><i class="fas fa-language"></i></span>
+                    <span><strong class="text-[#faf6f1]">方言不是壁垒而是特色：</strong>95%潮汕方言反而成为文化辨识度和情感真实感的来源</span>
+                </li>
+                <li class="flex items-start gap-3">
+                    <span class="text-[#d4a574] mt-1"><i class="fas fa-user-friends"></i></span>
+                    <span><strong class="text-[#faf6f1]">素人演员创造真实感：</strong>84岁素人阿嬷的「零表演痕迹」成为最大泪点，反向验证工业化表演的局限</span>
+                </li>
+                <li class="flex items-start gap-3">
+                    <span class="text-[#d4a574] mt-1"><i class="fas fa-sync-alt"></i></span>
+                    <span><strong class="text-[#faf6f1]">平台协同而非单一依赖：</strong>没有哪一个平台单独成就这部电影，而是三端互补形成传播飞轮</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="mt-10 text-center">
+            <p class="text-[#5c4033]/50 text-sm leading-relaxed">
+                <i class="fas fa-database mr-1"></i>数据来源：豆瓣电影、猫眼专业版、灯塔专业版、新浪微博、公开报道<br>
+                数据采集时间：2026年6月 | 本文仅供数据分析参考
+            </p>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="bg-[#3d3229] text-[#faf6f1]/60 py-10 text-center text-sm">
+        <div class="max-w-4xl mx-auto px-4">
+            <div class="mb-4 text-2xl text-[#d4a574]">
+                <i class="fas fa-envelope-open-text"></i>
+            </div>
+            <p class="serif text-lg text-[#faf6f1]/90 mb-2">多平台联动传播分析</p>
+            <p>《给阿嬷的情书》口碑与热度数据观察</p>
+            <p class="mt-4 text-xs text-[#faf6f1]/40">
+                数据新闻制作 | 基于公开数据整理分析<br>
+                愿每一封写给阿嬷的情书，都被世界温柔拆阅
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // 豆瓣图表
+        const doubanCtx = document.getElementById('doubanChart').getContext('2d');
+        new Chart(doubanCtx, {
+            type: 'line',
+            data: {
+                labels: ['4.30', '5.05', '5.09', '5.14', '5.17', '5.21', '5.25', '5.28', '5.31'],
+                datasets: [{
+                    label: '豆瓣评分',
+                    data: [0, 9.0, 9.0, 9.1, 9.1, 9.1, 9.2, 9.2, 9.2],
+                    borderColor: '#c17f59',
+                    backgroundColor: 'rgba(193, 127, 89, 0.1)',
+                    tension: 0.4,
+                    fill: true,
+                    pointRadius: 6,
+                    pointBackgroundColor: '#c17f59',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                    yAxisID: 'y'
+                }, {
+                    label: '评分人数（万）',
+                    data: [0, 12, 20, 27, 35, 45, 64, 70, 72],
+                    borderColor: '#9caf88',
+                    backgroundColor: 'rgba(156, 175, 136, 0.1)',
+                    tension: 0.4,
+                    fill: true,
+                    pointRadius: 6,
+                    pointBackgroundColor: '#9caf88',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                    yAxisID: 'y1'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: { mode: 'index', intersect: false },
+                plugins: {
+                    legend: { 
+                        position: 'top',
+                        labels: { usePointStyle: true, font: { family: "'Noto Sans SC', sans-serif" } }
+                    }
+                },
+                scales: {
+                    y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        min: 8.5,
+                        max: 9.5,
+                        grid: { color: 'rgba(196, 168, 130, 0.1)' },
+                        ticks: { color: '#5c4033', font: { family: "'Noto Sans SC', sans-serif" } }
+                    },
+                    y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        min: 0,
+                        max: 80,
+                        grid: { drawOnChartArea: false },
+                        ticks: { color: '#5c4033', font: { family: "'Noto Sans SC', sans-serif" } }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: '#5c4033', font: { family: "'Noto Sans SC', sans-serif" } }
+                    }
+                }
+            }
+        });
+
+        // 星级分布
+        const starCtx = document.getElementById('starChart').getContext('2d');
+        new Chart(starCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['五星', '四星', '三星', '二星', '一星'],
+                datasets: [{
+                    data: [60, 32, 6, 1.5, 0.5],
+                    backgroundColor: ['#c17f59', '#d4a574', '#c4a882', '#c9a9a6', '#bcaaa4'],
+                    borderWidth: 2,
+                    borderColor: '#fefdfb'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '60%',
+                plugins: {
+                    legend: { 
+                        position: 'bottom',
+                        labels: { usePointStyle: true, padding: 16, font: { family: "'Noto Sans SC', sans-serif" } }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.label + ': ' + context.parsed + '%';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // 票房增长
+        const boxCtx = document.getElementById('boxofficeChart').getContext('2d');
+        new Chart(boxCtx, {
+            type: 'bar',
+            data: {
+                labels: ['4.30', '5.09', '5.14', '5.17', '5.21', '5.25', '5.28', '5.31'],
+                datasets: [{
+                    label: '累计票房（亿元）',
+                    data: [0.0377, 1, 2, 5, 7.23, 10.86, 12, 14],
+                    backgroundColor: [
+                        'rgba(196, 168, 130, 0.3)',
+                        'rgba(193, 127, 89, 0.4)',
+                        'rgba(193, 127, 89, 0.5)',
+                        'rgba(193, 127, 89, 0.6)',
+                        'rgba(193, 127, 89, 0.7)',
+                        'rgba(193, 127, 89, 0.8)',
+                        'rgba(193, 127, 89, 0.9)',
+                        '#c17f59'
+                    ],
+                    borderColor: '#c17f59',
+                    borderWidth: 1,
+                    borderRadius: 6,
+                    borderSkipped: false
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: 'rgba(196, 168, 130, 0.1)' },
+                        ticks: { color: '#5c4033', font: { family: "'Noto Sans SC', sans-serif" } }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: '#5c4033', font: { family: "'Noto Sans SC', sans-serif" } }
+                    }
+                }
+            }
+        });
+
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // 滚动显示动画
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.letter-card, .memory-card, .quote-letter').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'all 0.8s ease-out';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
